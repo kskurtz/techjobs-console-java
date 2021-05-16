@@ -3,13 +3,12 @@ package org.launchcode.techjobs.console;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.w3c.dom.ls.LSOutput;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by LaunchCode
@@ -40,6 +39,7 @@ public class JobData {
 
             if (!values.contains(aValue)) {
                 values.add(aValue);
+
             }
         }
 
@@ -74,14 +74,32 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            String aValue = row.get(column);
+            String aValue = row.get(column).toLowerCase();
 
-            if (aValue.contains(value)) {
+            if (aValue.contains(value.toLowerCase())) {
                 jobs.add(row);
             }
         }
 
         return jobs;
+    }
+    public static ArrayList<HashMap<String,String>>findByValue(String value) {
+        //load data, if not already loaded
+        loadData();
+        ArrayList<HashMap<String, String>> jobs = new ArrayList<>();
+
+        for (HashMap<String, String> row : allJobs) {
+            for (Map.Entry<String, String> rows : row.entrySet()) {
+                String values = rows.getValue().toLowerCase();
+                if (values.contains(value.toLowerCase())) {
+                    jobs.add(row);
+                    break;
+                }
+            }
+
+        }
+            return jobs;
+
     }
 
     /**
